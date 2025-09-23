@@ -1,14 +1,25 @@
-## installation and Setup
+## Installation and Setup
 
 ### Web Application (Node.js)
+
 Navigate to the frontend folder
 
 #### Install dependencies:
-- npm install
 ```bash
-echo "Hello, world!"
-ls -l
+npm install
 ```
 
 #### Run the server:
-- npm start
+```bash
+npm start
+```
+
+#### Run the app
+```bash
+npm run dev
+```
+Next copy the local host link in your browser bar
+
+
+
+
