@@ -5,12 +5,14 @@ import {useState} from 'react';
 import {createUserWithEmailAndPassword} from 'firebase/auth';
 
 // gives access to firebase user authentication services
-import auth from '../../../backend/auth/firebase.js';
+import auth from '../../../../../auth/firebase.js';
 
 
 
 
 export default function SignUpPage(){
+
+    console.log("help")
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

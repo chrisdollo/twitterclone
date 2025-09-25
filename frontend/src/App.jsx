@@ -1,12 +1,11 @@
 import './App.css'
 
 import Top from './components/Top/Top.jsx'
+import WelcomeUserPage from './components/Pages/WelcomeUserPage/WecomeUserPage';
 import Feed from './components/Feed/Feed.jsx'
 
-import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 
-import SignUpPage from './pages/SignUpPage';
-import LogInPage from './pages/LogInPage.jsx';
+
 
 
 function App() {
@@ -15,20 +14,8 @@ function App() {
   return (
     <>
       <div>
-
-        <Router>
-          <nav>
-            <Link to="/">Page 1</Link>
-            <Link to="/page2">Page 2</Link>
-          </nav>
-
-          <Routes>
-            <Route path="/" element={<SignUpPage></SignUpPage>}></Route>
-            <Route path="/page2" element={<LogInPage></LogInPage>}></Route>
-          </Routes>
-        </Router>
-
-
+        <Top></Top>
+        <WelcomeUserPage></WelcomeUserPage>
       </div>
     </>
   )
