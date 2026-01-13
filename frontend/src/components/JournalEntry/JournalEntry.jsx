@@ -1,5 +1,5 @@
 import './JournalEntry.css'
-import profilePic from '/Users/chrisdollo/Documents/coding_projects/twitterclone/frontend/src/media/SpongeBob_SquarePants_character.png';
+import profilePic from '/Users/chrisdollo/Documents/coding_projects/hellacious/frontend/src/media/SpongeBob_SquarePants_character.png';
 
 export default function JournalEntry(){
     return (

@@ -31,6 +31,7 @@ export default function SignUpPage(){
 
     return (
         <div>
+            <h2>sign up page</h2>
             <form onSubmit={handleSignUp}>
                 <input name="email" type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input name="password" type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
