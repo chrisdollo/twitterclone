@@ -1,0 +1,105 @@
+.home {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: sans-serif;
+}
+
+.home-body {
+  display: grid;
+  grid-template-columns: 200px 1fr 280px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.home-left,
+.home-right {
+  position: sticky;
+  top: 1rem;
+}
+
+.home-main {
+  min-width: 0;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.home-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.current-user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.85rem;
+}
+
+.current-user-label {
+  color: #888;
+}
+
+.current-user-name {
+  font-weight: bold;
+}
+
+.post-form-section {
+  margin-bottom: 2rem;
+}
+
+.post-form-section h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.post-input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.post-submit {
+  align-self: flex-end;
+  padding: 0.4rem 1rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.post-submit:hover {
+  background-color: #555;
+}
+
+.feed-section h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

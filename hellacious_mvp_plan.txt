@@ -1,0 +1,368 @@
+HELLACIOUS MVP IMPLEMENTATION PLAN
+==================================
+
+High-Level Description
+----------------------
+
+Hellacious is a text-based social media MVP.
+
+The goal is to build a working full-stack app where users can select who they are, follow other users, create posts, view a friend feed, and comment on posts.
+
+This version does not include authentication. Instead, users are selected from the UI. This keeps the focus on the core social-media behavior: users, follows, posts, feeds, and comments.
+
+The app is built with React on the frontend, Supabase (Postgres) as the database, and Flask only for the friend feed query.
+
+
+MVP Objectives
+--------------
+
+By the end of the MVP, the app should allow users to:
+
+1. Select the current active user.
+2. View all users.
+3. Follow and unfollow users.
+4. Create text posts.
+5. View a feed containing:
+   - the current user's posts
+   - posts from followed users
+6. Comment on posts.
+7. All data persists in Supabase.
+
+
+Core Requirements
+-----------------
+
+Frontend Requirements:
+- React app created with Vite.
+- User interface should update visibly after each action.
+- User can select a profile.
+- User can follow/unfollow other users.
+- User can create posts.
+- User can see a feed.
+- User can comment on posts.
+
+Backend Requirements:
+- Flask API (friend feed only).
+- CORS enabled.
+- GET /api/feed/<user_id> returns filtered posts + comments.
+
+Database Requirements (Supabase):
+- users table
+- posts table
+- comments table
+- follows table
+
+Not Included Yet:
+- user creation from the UI
+- login
+- signup
+- passwords
+- JWT
+- image uploads
+- likes
+- notifications
+- direct messages
+- deployment
+- nested Reddit-style comments
+
+
+File Structure
+--------------
+
+hellacious/
+|
+|-- backend/
+|   |
+|   |-- app.py
+|   |-- requirements.txt
+|   |
+|   |-- routes/
+|       |
+|       |-- feed.py
+|
+|-- frontend/
+    |
+    |-- .env
+    |-- package.json
+    |
+    |-- src/
+        |
+        |-- main.jsx
+        |-- App.jsx
+        |
+        |-- api/
+        |   |
+        |   |-- supabase.js
+        |   |-- api.js
+        |
+        |-- pages/
+        |   |
+        |   |-- Home.jsx
+        |
+        |-- components/
+            |
+            |-- UserList.jsx
+            |-- FollowButton.jsx
+            |-- PostForm.jsx
+            |-- Feed.jsx
+            |-- PostCard.jsx
+            |-- CommentBox.jsx
+
+
+Database Schema (Supabase)
+--------------------------
+
+users:
+- id (uuid, primary key)
+- username (text, unique)
+- display_name (text)
+- created_at (timestamptz)
+
+posts:
+- id (uuid, primary key)
+- user_id (uuid, references users)
+- content (text)
+- created_at (timestamptz)
+
+comments:
+- id (uuid, primary key)
+- post_id (uuid, references posts)
+- user_id (uuid, references users)
+- content (text)
+- created_at (timestamptz)
+
+follows:
+- id (uuid, primary key)
+- follower_id (uuid, references users)
+- following_id (uuid, references users)
+- created_at (timestamptz)
+- unique(follower_id, following_id)
+
+
+Implementation Steps
+====================
+
+
+Step 1: Visual Shell + User UI ✓
+---------------------------------
+
+Goal:
+Build the visible app structure and get users on screen using temporary frontend data.
+
+Built:
+- App.jsx
+- Home.jsx + Home.css
+- UserList.jsx + UserList.css
+- useState for currentUser
+- props passing onSelect down to UserList
+
+Visible Result:
+The browser shows the Hellacious page. Users appear in a dropdown. Selecting a user updates the header.
+
+
+Step 2: Supabase + Real Users ✓
+--------------------------------
+
+Goal:
+Connect the frontend to Supabase and load real users from the database.
+
+Built:
+- Supabase project + all four tables
+- frontend/.env with Supabase URL and anon key
+- src/api/supabase.js (Supabase client)
+- src/api/api.js with getUsers() and createUser()
+- Home.jsx updated to load users via useEffect
+
+Visible Result:
+Users loaded from Supabase appear in the dropdown. Data persists after page refresh.
+
+
+Step 3: Follow/Unfollow
+------------------------
+
+Goal:
+Let the current user follow and unfollow other users. Store follows in Supabase.
+
+Build Frontend:
+- FollowButton.jsx
+- follow/unfollow buttons in UserList.jsx
+
+Add to api.js:
+- getFollowing(userId)
+- followUser(followerId, followingId)
+- unfollowUser(followerId, followingId)
+
+Visible Result:
+Chris follows Maya. Refresh the page. The follow relationship still exists.
+
+Frontend:
+- React
+- useState
+- Supabase JS client
+
+Concepts to Learn:
+- relationship state
+- button event handlers
+- many-to-many relationship
+- duplicate follow prevention (handled by Supabase unique constraint)
+- refreshing state after an action
+
+
+Step 4: Posts
+-------------
+
+Goal:
+Let the current user create posts. Store posts in Supabase.
+
+Build Frontend:
+- PostForm.jsx
+- Feed.jsx
+- PostCard.jsx
+
+Add to api.js:
+- createPost(userId, content)
+- getPosts()
+
+Visible Result:
+Create a post. Refresh the page. The post is still there.
+
+Frontend:
+- React
+- useState
+- controlled textarea
+- Supabase JS client
+
+Concepts to Learn:
+- form submission
+- textarea input
+- clearing input after submit
+- rendering cards
+- foreign keys
+- sorting by created_at
+
+
+Step 5: Friend Feed
+--------------------
+
+Goal:
+Show only relevant posts to the current user via the Flask backend.
+
+Feed Rule:
+The current user sees:
+- their own posts
+- posts from users they follow
+
+Build Backend:
+- routes/feed.py
+- GET /api/feed/<user_id>
+- Flask connects to Supabase Postgres directly
+
+Add to api.js:
+- getFeed(userId)
+- reload feed when current user changes
+- reload feed when follow/unfollow changes
+- reload feed when a new post is created
+
+Visible Result:
+Chris follows Maya. Maya creates a post. Chris sees Maya's post. Unrelated users' posts do not appear.
+
+Frontend:
+- React
+- useEffect
+- dependency arrays
+
+Backend:
+- Flask
+- psycopg2 or Supabase Python client
+
+Concepts to Learn:
+- feed generation
+- filtering
+- relationship-based queries
+- refreshing data after mutations
+
+
+Step 6: Comments
+-----------------
+
+Goal:
+Let users comment on posts. Store comments in Supabase.
+
+Build Frontend:
+- CommentBox.jsx
+- display comments inside PostCard.jsx
+
+Add to api.js:
+- createComment(postId, userId, content)
+
+Update:
+- GET /api/feed/<user_id> should include comments for each post
+
+Visible Result:
+Chris comments on Maya's post. Switch to Maya. Maya sees Chris's comment.
+
+Frontend:
+- React
+- Supabase JS client
+- state refresh
+
+Concepts to Learn:
+- child components
+- nested UI
+- local form state
+- one-to-many relationship
+- refreshing parent data from child action
+
+
+Step 7: Polish
+--------------
+
+Goal:
+Make the app feel usable.
+
+Build:
+- empty states
+- basic styling
+- validation (no empty posts or comments)
+- loading states
+- error handling
+
+Visible Result:
+The app is clear enough to demo.
+
+
+Final Demo Flow
+---------------
+
+1. Start Flask backend.
+2. Start React frontend.
+3. Select Chris.
+4. Chris follows Maya.
+5. Switch to Maya.
+6. Maya creates a post.
+7. Switch to Chris.
+8. Chris sees Maya's post in the feed.
+9. Chris comments on Maya's post.
+10. Switch to Maya.
+11. Maya sees Chris's comment.
+
+
+Build Philosophy
+----------------
+
+Connect Supabase directly from the frontend for all CRUD.
+Use Flask only for the friend feed query which requires joining multiple tables.
+
+Future Upgrade Path
+-------------------
+
+After this MVP works, add features in this order:
+
+1. User creation from the UI.
+2. Nested comments with parent_comment_id.
+3. Likes.
+4. User profile pages.
+5. Real authentication (Supabase Auth).
+6. Deployment.
+7. Notifications.
+8. Search.
